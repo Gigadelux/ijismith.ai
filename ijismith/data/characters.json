@@ -1,0 +1,19 @@
+[
+  {
+    "name": "String",
+    "role": "String (e.g., Protagonist, Antagonist, Ally, Mentor)",
+    "description": "String",
+    "backstory": "String",
+    "abilities": [
+      {
+        "ability": "String",
+        "ability_stats": [
+          {
+            "stat": "String",
+            "value": "Number"
+          }
+        ]
+      }
+    ]
+  }
+]

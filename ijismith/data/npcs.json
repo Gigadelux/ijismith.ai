@@ -1,0 +1,13 @@
+[
+  {
+    "name": "String",
+    "location": "String",
+    "role": "String (e.g., Quest Giver, Merchant, Information Broker)",
+    "dialogue": [
+      {
+        "prompt": "String (what the player might say)",
+        "response": "String (what the NPC says back)"
+      }
+    ]
+  }
+]

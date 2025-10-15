@@ -1,0 +1,14 @@
+{
+  "title": "String",
+  "protagonist": "String",
+  "antagonist": "String",
+  "inciting_incident": "String",
+  "plot_points": [
+    {
+      "act": "Number",
+      "description": "String"
+    }
+  ],
+  "climax": "String",
+  "resolution": "String"
+}
