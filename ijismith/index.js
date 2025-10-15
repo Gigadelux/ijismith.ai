@@ -135,31 +135,44 @@ const selectModel = async () => {
     const selectedModel = models[answers.model];
     await writeConfig({ model: selectedModel });
     console.log(chalk.green(`Model set to: ${answers.model}`));
+    process.stdin.ref();
 };
 
 
 // --- REPL ---
 const startRepl = async () => {
     const chatHistory = [];
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-        prompt: chalk.blue('> '),
-    });
+    
+    const createInterface = () => {
+        return readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+            prompt: chalk.blue('> '),
+        });
+    };
+    
+    let rl = createInterface();
+    let isSelectingModel = false;
 
     displayTitle();
     rl.prompt();
 
-    rl.on('line', async (line) => {
+    const handleLine = async (line) => {
         const input = line.trim();
         const lowerInput = input.toLowerCase();
 
         if (lowerInput === 'exit') {
             rl.close();
         } else if (lowerInput === 'model') {
-            rl.pause();
+            isSelectingModel = true;
+            rl.close();
             await selectModel();
-            rl.resume();
+            
+            // Recreate the readline interface
+            rl = createInterface();
+            rl.on('line', handleLine);
+            rl.on('close', handleClose);
+            isSelectingModel = false;
             rl.prompt();
         } else if (input) {
             await generateAllFiles(input, chatHistory);
@@ -168,10 +181,17 @@ const startRepl = async () => {
         } else {
             rl.prompt();
         }
-    }).on('close', () => {
-        console.log(chalk.yellow('Exiting ijismith. Happy game making!'));
-        process.exit(0);
-    });
+    };
+
+    const handleClose = () => {
+        if (!isSelectingModel) {
+            console.log(chalk.yellow('Exiting ijismith. Happy game making!'));
+            process.exit(0);
+        }
+    };
+
+    rl.on('line', handleLine);
+    rl.on('close', handleClose);
 };
 
 // --- Commander Setup ---
